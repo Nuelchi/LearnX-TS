@@ -13,10 +13,10 @@ interface PaystackResponse {
 }
 
 export const paystackService = {
-  // ✅ Initialize Payment
+  // Initialize Payment
   async initializePayment(email: string, amount: number): Promise<PaystackResponse> {
     try {
-      const response = await axios.post<PaystackResponse>( // 👈 Add generic type
+      const response = await axios.post<PaystackResponse>(
         "https://api.paystack.co/transaction/initialize",
         {
           email,
@@ -35,7 +35,7 @@ export const paystackService = {
     }
   },
 
-  // ✅ Verify Payment
+  // Verify Payment
   async verifyPayment(reference: string): Promise<PaystackResponse> {
     try {
       const response = await axios.get<PaystackResponse>( // 👈 Add generic type

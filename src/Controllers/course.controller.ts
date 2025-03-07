@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import CourseService from "../Services/course.service";
+import { subAuth } from "../Authorization/auth.middleware";
 
 export class CourseController {
     // Add a new course

@@ -23,12 +23,13 @@
     "@types/validator": "^13.12.2",
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   },
   "dependencies": {
     "@paystack/inline-js": "^2.22.2",
     "@types/axios": "^0.9.36",
-    "axios": "^1.8.2",
+    "axios": "^1.8.1",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -37,6 +38,7 @@
     "express-session": "^1.18.1",
     "mongoose": "^8.12.1",
     "passport-google-oauth20": "^2.0.0",
+    "paystack-api": "^2.0.6",
     "validator": "^13.12.0"
   }
 }
