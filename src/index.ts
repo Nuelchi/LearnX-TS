@@ -12,7 +12,7 @@ import userRoute from "./Routes/user.route"
 import adminRoute from "./Routes/admin.route"
 import courseRoute from "./Routes/course.route"
 import authRoutes from "./Routes/googleAuth.route"
-import paymentRoute from "./Routes/payment.route";
+import paymentRoute from "./Routes/paystack.route";
 
 const app = express();
 const PORT = process.env.PORT || 6000

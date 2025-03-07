@@ -1,5 +1,5 @@
 import express from "express";
-import { InitializePayment } from "../Controllers/payment.cotroller";
+import { InitializePayment } from "../Controllers/paystack.controller";
 import { subAuth  } from "../Authorization/auth.middleware";
 
 const { initPay, verifyPayment }= new InitializePayment
