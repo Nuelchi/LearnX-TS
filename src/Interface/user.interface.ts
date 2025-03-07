@@ -5,4 +5,5 @@ export interface Iuser {
     confirmPassword?: string;
     phone: string;
     role: "user" | "admin";
+    isSubscribed : boolean;
 }

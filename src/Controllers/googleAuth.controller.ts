@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUser } from "../Models/user.model";
+import {Iuser} from "../Interface/user.interface";
 
 export class AuthController {
     // Callback after Google authentication
@@ -9,7 +9,7 @@ export class AuthController {
 
     // Get user profile
     static async getProfile(req: Request, res: Response): Promise<void> {
-        const user = req.user as IUser;
+        const user = req.user as Iuser;
         if (!user) {
             res.status(401).json({ message: "Unauthorized" });
             return;

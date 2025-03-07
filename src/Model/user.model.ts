@@ -34,10 +34,15 @@ const userSchema = new Schema<Iuser & Document>({
         required: true,
         minlength: 11,
     },
+    
     role: {
         type: String,
         enum: ["user", "admin"]
-    }
+    },
+    isSubscribed: {
+        type: Boolean, 
+        default: false 
+    },
 }
     , { timestamps: true });
 

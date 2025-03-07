@@ -1,12 +1,18 @@
 import express, { Request, Response } from "express";
 import dotenv from 'dotenv';
 dotenv.config();
+import passport from "passport";
+import "./Config/passport";
+import session from 'express-session';
+import cors from "cors";
+
+//ROUTE IMPORTS
 import mongoose from "mongoose";
 import userRoute from "./Routes/user.route"
 import adminRoute from "./Routes/admin.route"
 import courseRoute from "./Routes/course.route"
-import passport from "passport";
-import session from 'express-session';
+import authRoutes from "./Routes/googleAuth.route"
+import paymentRoute from "./Routes/payment.route";
 
 const app = express();
 const PORT = process.env.PORT || 6000
@@ -14,12 +20,22 @@ const PORT = process.env.PORT || 6000
 //MIDDLEWARES
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+app.use(cors());
+app.use(session ({
+    secret: 'my-session-secret',
+    resave: false,
+    saveUninitialized: true,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 //ROUTES
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/admin", adminRoute)
 app.use("/api/v1/course", courseRoute)
+app.use("/auth", authRoutes)
+app.use("/api/payments", paymentRoute)
 
 
 
