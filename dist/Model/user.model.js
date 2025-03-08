@@ -43,9 +43,9 @@ const userSchema = new mongoose_1.Schema({
     },
     phone: {
         type: String,
-        required: true,
+        required: [true, 'Please enter your phone number'],
         minlength: 11,
-        unique: true
+        unique: [true, 'Please enter a new phone number']
     },
     role: {
         type: String,

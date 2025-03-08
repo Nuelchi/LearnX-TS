@@ -20,27 +20,23 @@ class InitializePayment {
     constructor() {
         this.initPay = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId } = req.params; // Get userId from request params
-                const reference = Math.random().toString(36).substring(2, 15); // Generate a reference
-                const amount = 100000; // Fixed amount
-                // Check if user exists
-                const user = yield user_model_1.default.findById(userId);
+                const user = req.user;
                 if (!user) {
-                    res.status(404).json({ message: "User not found" });
+                    res.status(401).json({ message: "Unauthorized. User not found." });
                     return;
                 }
-                // Save payment in the database
+                const reference = Math.random().toString(36).substring(2, 15);
+                const amount = 100000; // Fixed amount
+                // ✅ Save payment in the database
                 const newPayment = new payment_model_1.default({
-                    userId: user._id,
+                    userId: user._id, // Use `_id` from the user object
                     userEmail: user.email,
                     amount,
                     reference,
                     status: "pending",
                 });
                 yield newPayment.save();
-                // Call Paystack to process payment
                 const paymentResponse = yield paystackService_1.paystackService.initializePayment(user.email, amount);
-                yield user_model_1.default.findByIdAndUpdate(userId, { isSubscribed: true });
                 res.status(200).json(paymentResponse);
             }
             catch (error) {
@@ -49,11 +45,10 @@ class InitializePayment {
         });
         this.verifyPay = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId, reference } = req.params;
-                // Check if user exists
-                const user = yield user_model_1.default.findById(userId);
+                const { reference } = req.params;
+                const user = req.user;
                 if (!user) {
-                    res.status(404).json({ message: "User not found" });
+                    res.status(401).json({ message: "Unauthorized. User not found." });
                     return;
                 }
                 if (!reference) {
@@ -62,9 +57,17 @@ class InitializePayment {
                 }
                 // Verify payment via Paystack
                 const verificationResponse = yield paystackService_1.paystackService.verifyPayment(reference);
-                // Update payment status in DB
-                yield payment_model_1.default.findOneAndUpdate({ reference }, { status: verificationResponse.status });
-                res.status(200).json(verificationResponse);
+                if (typeof verificationResponse.status !== "string" || verificationResponse.status.toLowerCase() !== "success") {
+                    res.status(400).json({ message: "Payment verification failed", details: verificationResponse });
+                    return;
+                }
+                // ✅ Update payment status in DB to "paid"
+                yield payment_model_1.default.findOneAndUpdate({ reference }, { status: "paid" }, // Update status to 'paid'
+                { new: true } // Return the updated document
+                );
+                // ✅ Mark the user as subscribed
+                yield user_model_1.default.findByIdAndUpdate(user._id, { isSubscribed: true });
+                res.status(200).json({ message: "Payment verified and status updated to paid", verificationResponse });
             }
             catch (error) {
                 res.status(500).json({ message: error.message });
@@ -73,3 +76,4 @@ class InitializePayment {
     }
 }
 exports.InitializePayment = InitializePayment;
+;

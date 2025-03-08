@@ -7,17 +7,18 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const passport_1 = __importDefault(require("passport"));
+// Ensure passport strategy is loaded before using it
 const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
+require("./Services/googleAuth.service");
+const app = (0, express_1.default)();
+const PORT = process.env.PORT || 6000;
 //ROUTE IMPORTS
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_route_1 = __importDefault(require("./Routes/user.route"));
 const admin_route_1 = __importDefault(require("./Routes/admin.route"));
 const course_route_1 = __importDefault(require("./Routes/course.route"));
-const googleAuth_route_1 = __importDefault(require("./Routes/googleAuth.route"));
 const paystack_route_1 = __importDefault(require("./Routes/paystack.route"));
-const app = (0, express_1.default)();
-const PORT = process.env.PORT || 6000;
 //MIDDLEWARES
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
@@ -33,8 +34,24 @@ app.use(passport_1.default.session());
 app.use("/api/v1/user", user_route_1.default);
 app.use("/api/v1/admin", admin_route_1.default);
 app.use("/api/v1/course", course_route_1.default);
-app.use("/auth", googleAuth_route_1.default);
 app.use("/api/v1/payment", paystack_route_1.default);
+app.get('/auth/google', passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google/callback', passport_1.default.authenticate('google', {
+    failureRedirect: '/',
+}), (req, res) => {
+    res.redirect('/profile'); // Redirect to user profile after login
+});
+//profile route
+app.get('/profile', (req, res) => {
+    const user = req.user;
+    res.send(`welcome ${user.name} you have successfully signed into E-commerce app, you may continue your shopping now!!`);
+});
+//logout route
+app.get("/logout", (req, res) => {
+    req.logout(() => {
+        res.redirect("/");
+    });
+});
 //DATABASE CONNECTION
 mongoose_1.default.connect(process.env.MONGO_URL)
     .then(() => console.log("mongoDb connected"))

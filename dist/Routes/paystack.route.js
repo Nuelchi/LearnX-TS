@@ -10,6 +10,6 @@ const { authUser, payAuth } = new auth_middleware_1.Authorization;
 const paymentController = new paystack_controller_1.InitializePayment();
 const router = express_1.default.Router();
 // Use middleware to attach user and generate reference
-router.post("/pay/:id", authUser, paymentController.initPay);
+router.post("/pay", authUser, paymentController.initPay);
 router.get("/verify/:reference", paymentController.verifyPay);
 exports.default = router;
