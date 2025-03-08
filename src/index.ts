@@ -8,7 +8,7 @@ import cors from "cors";
 import './Services/googleAuth.service'
 
 const app = express();
-const PORT = process.env.PORT || 6000
+const PORT = process.env.PORT || 8000
 
 
 //ROUTE IMPORTS
