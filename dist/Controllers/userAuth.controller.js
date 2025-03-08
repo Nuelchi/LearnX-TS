@@ -34,16 +34,14 @@ class UserController {
     signIn(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield userService.signIn(req.body);
-                res.status(201).json({ message: "welcome back, you are successfully signed in" });
+                const token = yield userService.signIn(req.body);
+                res.status(200).json({ token });
             }
             catch (error) {
-                console.log(error);
-                res.status(404).json({ message: "something went wrong" });
+                res.status(401).json({ error: error.message });
             }
         });
     }
-    ;
 }
 exports.UserController = UserController;
 ;

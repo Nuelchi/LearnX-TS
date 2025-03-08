@@ -38,7 +38,7 @@ export const paystackService = {
   // Verify Payment
   async verifyPayment(reference: string): Promise<PaystackResponse> {
     try {
-      const response = await axios.get<PaystackResponse>( // 👈 Add generic type
+      const response = await axios.get<PaystackResponse>(
         `https://api.paystack.co/transaction/verify/${reference}`,
         {
           headers: { Authorization: `Bearer ${PAYSTACK_SECRET_KEY}` },

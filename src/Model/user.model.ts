@@ -31,13 +31,15 @@ const userSchema = new Schema<Iuser & Document>({
     },
     phone: {
         type: String,
-        required: true,
+        required: [true, 'Please enter your phone number'],
         minlength: 11,
+        unique: [true, 'Please enter a new phone number']
     },
     
     role: {
         type: String,
-        enum: ["user", "admin"]
+        enum: ["user", "admin"],
+        default: "user"
     },
     isSubscribed: {
         type: Boolean, 

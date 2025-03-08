@@ -1,14 +1,16 @@
 import express from "express";
 import { InitializePayment } from "../Controllers/paystack.controller";
-// import { subAuth } from "../Authorization/auth.middleware";
+import { attachUserAndGenerateReference } from "../Authorization/paystack.middleware";
+import { Authorization } from "../Authorization/auth.middleware";
 
-const paymentController = new InitializePayment(); // ✅ Correctly instantiate the class
+
+const {authUser, payAuth} = new Authorization
+
+const paymentController = new InitializePayment();
 const router = express.Router();
 
-// Initialize Payment (User must be authenticated)
-// router.post("/pay", paymentController.initPay.bind(paymentController));
-
-// // Verify Payment
-// router.get("/verify/:reference", paymentController.verifyPayment.bind(paymentController));
+// Use middleware to attach user and generate reference
+router.post("/pay", authUser, paymentController.initPay);
+router.get("/verify/:reference", paymentController.verifyPay);
 
 export default router;

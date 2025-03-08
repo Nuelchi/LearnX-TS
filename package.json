@@ -16,10 +16,12 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.13.9",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/uuid": "^10.0.0",
     "@types/validator": "^13.12.2",
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
@@ -39,6 +41,7 @@
     "mongoose": "^8.12.1",
     "passport-google-oauth20": "^2.0.0",
     "paystack-api": "^2.0.6",
+    "uuid": "^11.1.0",
     "validator": "^13.12.0"
   }
 }

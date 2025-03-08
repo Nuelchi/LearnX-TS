@@ -45,11 +45,17 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: true,
         minlength: 11,
+        unique: true
     },
     role: {
         type: String,
-        enum: ["user", "admin"]
-    }
+        enum: ["user", "admin"],
+        default: "user"
+    },
+    isSubscribed: {
+        type: Boolean,
+        default: false
+    },
 }, { timestamps: true });
 // Pre-save hook to hash the password
 userSchema.pre('save', function (next) {

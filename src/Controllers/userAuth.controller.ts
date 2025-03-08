@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../Services/userAuth.service";
+
 // import { Iuser } from "../Interface/user.interface";
 
 const userService= new UserService();
@@ -13,24 +14,22 @@ export class UserController{
     try {
         const newUser= await userService.signUp(userData);
         res.status(201).json({message:"user registered successfully", user:newUser});
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      res.status(500).json({message:"something went wrong"})
+      res.status(500).json({error: error.message})
     }
 
   };
 
-  async signIn(req:Request, res:Response){
-
+  async signIn(req: Request, res: Response) {
     try {
-       await userService.signIn(req.body)
-        res.status(201).json({message: "welcome back, you are successfully signed in"});
-      
-    } catch (error) {
-        console.log(error)
-        res.status(404).json({message:"something went wrong"})
+      const token = await userService.signIn(req.body);
+      res.status(200).json({ token });
+    } catch (error: any) {
+      res.status(401).json({ error: error.message });
     }
-  };
+  }
+
 
 //   async updateUser(req:Request, res:Response):Promise<void>{
 //     const{user}= req.params

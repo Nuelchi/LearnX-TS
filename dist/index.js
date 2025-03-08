@@ -6,19 +6,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const passport_1 = __importDefault(require("passport"));
+const express_session_1 = __importDefault(require("express-session"));
+const cors_1 = __importDefault(require("cors"));
+//ROUTE IMPORTS
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_route_1 = __importDefault(require("./Routes/user.route"));
 const admin_route_1 = __importDefault(require("./Routes/admin.route"));
 const course_route_1 = __importDefault(require("./Routes/course.route"));
+const googleAuth_route_1 = __importDefault(require("./Routes/googleAuth.route"));
+const paystack_route_1 = __importDefault(require("./Routes/paystack.route"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 6000;
 //MIDDLEWARES
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+app.use((0, express_session_1.default)({
+    secret: 'my-session-secret',
+    resave: false,
+    saveUninitialized: true,
+}));
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
 //ROUTES
 app.use("/api/v1/user", user_route_1.default);
 app.use("/api/v1/admin", admin_route_1.default);
 app.use("/api/v1/course", course_route_1.default);
+app.use("/auth", googleAuth_route_1.default);
+app.use("/api/v1/payment", paystack_route_1.default);
 //DATABASE CONNECTION
 mongoose_1.default.connect(process.env.MONGO_URL)
     .then(() => console.log("mongoDb connected"))

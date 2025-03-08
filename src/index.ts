@@ -2,20 +2,22 @@ import express, { Request, Response } from "express";
 import dotenv from 'dotenv';
 dotenv.config();
 import passport from "passport";
-import "./Config/passport";
-import session from 'express-session';
+ // Ensure passport strategy is loaded before using it
+import session from "express-session";
 import cors from "cors";
+import './Services/googleAuth.service'
+
+const app = express();
+const PORT = process.env.PORT || 6000
+
 
 //ROUTE IMPORTS
 import mongoose from "mongoose";
 import userRoute from "./Routes/user.route"
 import adminRoute from "./Routes/admin.route"
 import courseRoute from "./Routes/course.route"
-import authRoutes from "./Routes/googleAuth.route"
 import paymentRoute from "./Routes/paystack.route";
 
-const app = express();
-const PORT = process.env.PORT || 6000
 
 //MIDDLEWARES
 app.use(express.urlencoded({extended:true}));
@@ -34,8 +36,37 @@ app.use(passport.session());
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/admin", adminRoute)
 app.use("/api/v1/course", courseRoute)
-app.use("/auth", authRoutes)
-app.use("/api/payments", paymentRoute)
+app.use("/api/v1/payment", paymentRoute)
+
+
+
+//GOOGLE SIGIN SERVER AND SETUP
+type User = {
+    name: string;
+    email: string;
+  };
+  app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+app.get('/auth/google/callback',
+    passport.authenticate('google', {
+      failureRedirect: '/',
+    }),
+    (req:Request, res:Response) => {
+      res.redirect('/profile'); // Redirect to user profile after login
+    }
+  );
+//profile route
+app.get('/profile', (req:Request, res:Response) => {
+    const user = req.user as User;
+    res.send(`welcome ${user.name} you have successfully signed into E-commerce app, you may continue your shopping now!!`)
+});
+//logout route
+app.get("/logout", (req: Request, res: Response) => {
+    req.logout(() => {
+      res.redirect("/");
+    });
+  });
+
+
 
 
 
