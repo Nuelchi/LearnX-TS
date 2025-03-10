@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { adminService } from "../Services/adminAuth.service";
 import { Iuser } from "../Interface/user.interface"
-// import { Iuser } from "../Interface/user.interface";
 
 const userService = new adminService();
 

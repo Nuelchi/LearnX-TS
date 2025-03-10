@@ -9,6 +9,8 @@ interface AuthenticatedRequest extends Request {
 }
 
 export class Authorization {
+
+    //midlleware to verify payment before access  to course
     payAuth = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response | void> => {
         try {
             if (!req.user) {
@@ -26,7 +28,7 @@ export class Authorization {
         }
     }
 
-
+    //middleware to verify JWT
     authUser = async (req: Request & { user?: any }, res: Response, next: NextFunction): Promise<void> => {
         try {
             const authorizationHeader = req.headers.authorization;
@@ -37,7 +39,7 @@ export class Authorization {
 
             const token = authorizationHeader.split(" ")[1]; // Extract the token
             const decoded: any = jwt.verify(token, process.env.SECRET_STRING as string); // Verify token
-        
+
 
             const user = await User.findById(decoded.id);
             if (!user) {
@@ -52,5 +54,24 @@ export class Authorization {
             console.error("Token verification failed:", error.message);
             res.status(401).json({ message: "Invalid or expired token" });
         }
+    };
+
+
+
+    // Middleware to restrict certain roles
+    restriction = (...roles: string[]) => {
+        return (req: Request & { user?: any }, res: Response, next: NextFunction): void => {
+            if (!req.user) {
+                res.status(401).json({ message: "User not authenticated" });
+                return;
+            }
+
+            if (!roles.includes(req.user.role)) {
+                res.status(403).json({ message: "You do not have access to perform this action" });
+                return;
+            }
+
+            next();
+        };
     };
 };

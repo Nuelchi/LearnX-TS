@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { UserService } from "../Services/userAuth.service";
 
-// import { Iuser } from "../Interface/user.interface";
 
 const userService= new UserService();
 
 export class UserController{
+
   async signUp(req:Request, res:Response): Promise<void>{
     const userData=req.body;
     const{name, email, password, phone}= userData;

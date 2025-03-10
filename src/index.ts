@@ -51,7 +51,7 @@ app.get('/auth/google/callback',
       failureRedirect: '/',
     }),
     (req:Request, res:Response) => {
-      res.redirect('/profile'); // Redirect to user profile after login
+      res.redirect('/profile'); 
     }
   );
 //profile route

@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import CourseService from "../Services/course.service";
+import { Authorization } from "../Authorization/auth.middleware";
 
+//Auth instance
+const {authUser, payAuth} = new Authorization
 
 export class CourseController {
     // Add a new course
@@ -35,6 +38,22 @@ export class CourseController {
         try {
             const { title } = req.query;
             const courses = await CourseService.getCourses(title as string);
+
+            if (!courses.length) {
+                res.status(404).json({ message: "No courses found" });
+                return;
+            }
+
+            res.status(200).json(courses);
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    // Get all courses in a category (backend, frontend etc)
+    async getCourseCategry(req: Request, res: Response): Promise<void> {
+        try {
+            const { category } = req.query;
+            const courses = await CourseService.getCourseCategory(category as string);
 
             if (!courses.length) {
                 res.status(404).json({ message: "No courses found" });

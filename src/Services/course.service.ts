@@ -20,6 +20,14 @@ export class CourseService {
         return await Course.find({});
     }
 
+     // Get all courses in a category (backend, frontend etc)
+    async getCourseCategory(category?: string): Promise<Icourse[]> {
+        if (category) {
+            return await Course.find({ category: { $regex: new RegExp(category, "i") } });
+        }
+        return await Course.find({});
+    }
+
     // Update a course by ID
     async updateCourse(id: string, courseData: Partial<Icourse>): Promise<Icourse | null> {
         return await Course.findByIdAndUpdate(id, courseData, { new: true, runValidators: true });

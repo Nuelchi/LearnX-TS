@@ -12,7 +12,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
 require("./Services/googleAuth.service");
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 8000;
 //ROUTE IMPORTS
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_route_1 = __importDefault(require("./Routes/user.route"));

@@ -1,6 +1,5 @@
 import express from "express";
 import { InitializePayment } from "../Controllers/paystack.controller";
-import { attachUserAndGenerateReference } from "../Authorization/paystack.middleware";
 import { Authorization } from "../Authorization/auth.middleware";
 
 
